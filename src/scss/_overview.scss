@@ -1,0 +1,24 @@
+@use 'colors';
+
+.overview {
+    color: colors.$text-light;
+    text-shadow: colors.$text-shadow;
+    font-size: 1.5em;
+    background-color: colors.$overview-light;
+    text-align: center;
+    padding: 3em 0;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5em;
+}
+
+.overview--icon {
+    max-width: 10em;
+}
+
+.overview--info {
+    display: flex;
+    gap: 1em
+}

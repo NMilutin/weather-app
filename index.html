@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/scss/main.scss">
+    <script src="./src/js/controller.js" type="module"></script>
+    <title>Weather App</title>
+</head>
+<body>
+    <main>
+       <div class="overview">
+           <!-- <div class="overview--location">           
+               Woochuck City
+           </div>
+           <img class="overview--icon" src="./src/img/svg/day_clear.svg"/>
+           <div class="overview--temp">
+                38C
+           </div>
+           <div class="overview--condition">Clear Sky</div>
+           <div class="overview--info">
+                <div class="info-block info--feel">37C</div>
+                <div class="info-block info--wind">5.6 m/s</div>
+                <div class="info-block info--uv">7</div>
+           </div> -->
+       </div> 
+       <div class="block block--daily">
+           <div class="block-title">Daily Forecast</div> 
+           <div class="block-cards">
+                <div class="card card-daily">
+                    <div class="date--date">7/17</div>
+                    <div class="date--day">Wed</div>
+                    <div class="card-daily--daytime">
+                        <div class="icon"></div>
+                        <div class="card-temp">39</div>
+                    </div>
+                    <div class="card-daily--nighttime">
+                        <div class="icon"></div>
+                        <div class="card-temp">23</div>
+                    </div>
+                </div>
+           </div>
+       </div>
+       <div class="block block--hourly">
+            <div class="block-title">Hourly Forecast</div>
+            <div class="block-cards">
+                <div class="card card-hourly">
+                    <div class="date--date">7/17</div>
+                    <div class="date--time">1 PM</div>
+                    <div class="icon"></div>
+                    <div class="card-temp">38</div>
+                </div>
+            </div>
+       </div>
+       <div class="block block--air">
+            <div class="block-title">Air Quality</div>
+            <div class="air-quality-index">40</div>
+            <div class="air-quality-details">
+                <div class="pollutant">
+                    <div class="pollutant-name">PM2.5</div>
+                    <div class="pollutant-quantity">7ug/m3</div>
+                    <div class="pollutant-bar"></div>
+                </div>
+            </div>
+       </div>
+       <div class="block block--details">
+            <div class="detail">
+                <div class="detail-icon"></div>
+                <div class="detail-name">Dew Point</div>
+                <div class="detail-value">11C</div>
+            </div>
+       </div>
+    </main>
+</body>
+</html>
