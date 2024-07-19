@@ -1,20 +1,10 @@
 import * as icons from 'url:../../img/svg/*.svg';
+import View from './View.js';
 
-console.log(icons);
-
-class OverviewView {
-    _data;
+class OverviewView extends View{
     _parentEl = document.querySelector('.overview'); 
-    render(data) {
-        if(!data || (Array.isArray(data) && data.length===0)) return;
-        this._data = data;
-        const markup = this._generateMarkup();
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin',markup);
-    }
-    _clear() {
-        this._parentEl.innerHTML='';
-    }
+    _errorMessage = 'There has been an error fetching the weather data! Please try again.'
+    
     _generateMarkup() {
         return `<div class="overview--location">           
                ${this._data.place}
@@ -23,15 +13,23 @@ class OverviewView {
            <div class="overview--temp">
                 ${this._data.temperature}
            </div>
-           <div class="overview--condition">Clear Sky</div>
+           <div class="overview--condition">${this._data.weather}</div>
            <div class="overview--info">
-                <div class="info-block info--feel">${this._data.realfeel}</div>
-                <div class="info-block info--wind">5.6 m/s</div>
-                <div class="info-block info--uv">7</div>
+                <div class="info-block info--feel">Real Feel: ${this._data.realfeel}</div>
+                <div class="info-block info--wind">Wind: ${this._data.wind.speed} <div style="transform: rotateZ(${this._data.wind.direction+90}deg">➤</div></div>
+                <div class="info-block info--uv">UV Index: 7</div>
            </div>` 
     }
     addHandlerLoad(handler) {
         window.addEventListener('load',handler);
+    }
+    addHandlerOpenSettings(handler) {
+        document.querySelector('.settings-button').addEventListener('click',function(){
+            document.querySelector('.settings').classList.remove('hidden');
+            document.documentElement.classList.add('hide-scrollbar');
+            window.scrollTo({top:0, left:0,behavior: 'smooth'})
+        });
+        handler();
     }
 }
 

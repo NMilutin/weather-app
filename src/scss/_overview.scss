@@ -22,3 +22,8 @@
     display: flex;
     gap: 1em
 }
+
+.info-block {
+    flex: 1;
+    // max-width: calc(100%/3)
+}

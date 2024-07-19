@@ -6,7 +6,13 @@ html * {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Mulish', sans-serif;
+    .overview, .overview--block{
+        padding-left: calc(100vw - 100%); 
+    }
 }
 img {
     display: block;
+}
+.hide-scrollbar {
+    overflow-y:hidden;
 }
