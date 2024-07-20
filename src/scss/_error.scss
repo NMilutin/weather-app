@@ -1,8 +1,17 @@
+@use 'colors';
 .error {
-    display: flex;
-    width: 40%;
-    gap: 2em;
+    position:absolute;
+    bottom: 5em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50vmin;
     font-size: .75em;
+    border: colors.$error-border;
+    border-radius: 5px;
+    background-color: colors.$settings-bg;
+    color: colors.$text-light;
+    display: flex;
+    justify-content: space-between;
 }
 
 .error-icon {

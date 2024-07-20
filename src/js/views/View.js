@@ -2,8 +2,7 @@ import * as icons from 'url:../../img/svg/*.svg'
 class View {
     _data;
     render(data) {
-        if(!data || (Array.isArray(data) && data.length===0)) return;
-        console.log(data);
+        if(!data) return;
         this._data = data;
         const markup = this._generateMarkup();
         this._clear();
@@ -16,8 +15,10 @@ class View {
             <div class="error-message">${message}</div>
         </div>
         `
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin',markup)
+        document.body.insertAdjacentHTML('beforeend',markup);
+        setTimeout(() => {
+            document.querySelector('.error').remove();
+        }, 2000);
     }
     _clear() {
         this._parentEl.innerHTML='';

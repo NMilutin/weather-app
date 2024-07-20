@@ -19,15 +19,23 @@ const controlPlaceAdd = async function(place) {
     try {
         const geoData = await model.searchPlace(place);     
         if (!geoData) throw new Error('Place not found, try again.')
-        const [lon,lat] = geoData.geometry.coordinates;
-        const placeName = `${geoData.properties.name}, ${geoData.properties.country}`;
+        const [lon,lat] = [geoData.longitude,geoData.latitude]
+        const placeName = `${geoData.name}, ${geoData.country}`;
         model.placeAdd(placeName,lat,lon)
         placesView.render(model.state.places);
     } catch (err) {
-        
+       placesView.renderError(); 
     }
 }
-
+const controlPlaceDel = async function(i) {
+    try {
+        model.placeDel(i);
+        placesView.render(model.state.places);
+    } catch (err) {
+        placesView.renderError('Invalid place index!')
+    }
+}
 overviewView.addHandlerLoad(controlOverview);
 overviewView.addHandlerOpenSettings(controlOpenSettings);
-placesView.addHandlerPlaceAdd(controlPlaceAdd)
+placesView.addHandlerPlaceAdd(controlPlaceAdd);
+placesView.addHandlerPlaceDel(controlPlaceDel);

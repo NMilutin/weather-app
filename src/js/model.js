@@ -61,11 +61,15 @@ export const getForecast = async function() {
 export const searchPlace = async function(place) {
     try {
         const data = await getJSON(`${GEO_API_URL}${place}`);
-        return data.features[0]
+        return data?.results[0];
     } catch (err) {
         throw err;
     }
 }
 export const placeAdd = function(place,lat,lon) {
     state.places.push({place,coords:{lat,lon}})
+}
+
+export const placeDel = function(i) {
+    state.places.splice(i,1);
 }

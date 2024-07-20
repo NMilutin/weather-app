@@ -10,8 +10,11 @@ html * {
         padding-left: calc(100vw - 100%); 
     }
 }
-img {
+img, input {
     display: block;
+}
+input {
+    min-width: 0;
 }
 .hide-scrollbar {
     overflow-y:hidden;
