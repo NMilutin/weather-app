@@ -6,7 +6,7 @@ class PlacesView extends View {
     _errorMessage = 'No places found! Try again with a different one.';
     _generateMarkup() {
         return `
-        <div class="add-place-container"><input id="place-add" alt="Place Name"/><img class="place-add" src="${icons.add}"/></div>
+        <div class="add-place-container"><input id="place-add" alt="Place Name" autocomplete="off"/><img class="place-add" src="${icons.add}"/></div>
         <div class="places-list"> 
             ${this._data.map((place,i)=>`
                 <div class="place" data-i="${i}"><div class=place-name>${place.place}</div><img class="place-del" src="${icons.delete}"/></div>`

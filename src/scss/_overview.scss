@@ -1,5 +1,18 @@
 @use 'colors';
 
+.btn-reload {
+    font-size: 1rem;
+    position: absolute;
+    top: 1em;
+    right: 3.5em;
+    width: 2em;
+    transition: transform 1s ease-in-out;
+}
+.btn-reload:hover {
+    transform: rotateZ(360deg);
+}
+
+
 .overview {
     color: colors.$text-light;
     text-shadow: colors.$text-shadow;

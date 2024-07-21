@@ -3,10 +3,12 @@ import View from './View.js';
 
 class OverviewView extends View{
     _parentEl = document.querySelector('.overview'); 
-    _errorMessage = 'There has been an error fetching the weather data! Please try again.'
+    _errorMessage = 'There are no added places or there has been an error fetching weather data.'
     
     _generateMarkup() {
-        return `<div class="overview--location">           
+        return `
+            <img class="btn-reload" src="./src/img/svg/reload.svg"/>
+            <div class="overview--location">           
                ${this._data.place}
            </div>
            <img class="overview--icon" src="${icons[this._data.icon]}"/>
@@ -21,7 +23,11 @@ class OverviewView extends View{
            </div>` 
     }
     addHandlerLoad(handler) {
-        window.addEventListener('load',handler);
+        this._parentEl.addEventListener('click',function(e) {
+            const btn = e.target.closest('.btn-reload');
+            if (!btn) return;
+            handler();
+        });
     }
     addHandlerOpenSettings(handler) {
         document.querySelector('.settings-button').addEventListener('click',function(){

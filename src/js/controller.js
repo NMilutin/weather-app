@@ -1,6 +1,8 @@
 import * as model from './model.js'
 import overviewView from './views/overviewView.js'
 import placesView from './views/placesView.js';
+import settingsView from './views/settingsView.js';
+
 const controlOverview = async function() {
     try {
         await model.getForecast();
@@ -13,6 +15,9 @@ const controlOverview = async function() {
 
 const controlOpenSettings = function() {
     placesView.render(model.state.places);
+}
+const controlCloseSettings = function() {
+    controlOverview();
 }
 
 const controlPlaceAdd = async function(place) {
@@ -39,3 +44,4 @@ overviewView.addHandlerLoad(controlOverview);
 overviewView.addHandlerOpenSettings(controlOpenSettings);
 placesView.addHandlerPlaceAdd(controlPlaceAdd);
 placesView.addHandlerPlaceDel(controlPlaceDel);
+settingsView.addHandlerCloseSettings(controlCloseSettings);

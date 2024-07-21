@@ -1,10 +1,11 @@
 import {getJSON} from './helpers.js';
-import {API_URL,CUR_WEATHER_ARG,GEO_API_URL} from './config.js'
+import {API_URL,CUR_WEATHER_ARGS,GEO_API_URL} from './config.js'
 export const state = {
     current: {},
     coords: {lat:0,lon:0},
     places: [
     ],
+    currentPlace: {}
 }
 const weatherCodes = new Map([
     [0,{string:"Clear Sky",icon:{dayNight: true,icon:'clear'}}],
@@ -50,7 +51,7 @@ const generateCurrentForecast = function (data) {
 
 export const getForecast = async function() {
     try {
-        const data = await getJSON('https://api.open-meteo.com/v1/forecast?latitude=44.6232&longitude=20.9236&current=temperature_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m&timezone=auto');
+        const data = await getJSON(`${API_URL}?longitude=${state.currentPlace.lon}&latitude=${state.currentPlace.lat}&${CUR_WEATHER_ARGS}`);
         state.current = generateCurrentForecast(data);
     }
     catch(err) {
@@ -67,7 +68,7 @@ export const searchPlace = async function(place) {
     }
 }
 export const placeAdd = function(place,lat,lon) {
-    state.places.push({place,coords:{lat,lon}})
+    state.places.push({place,coords:{lat,lon},active:!state.places.length})
 }
 
 export const placeDel = function(i) {
