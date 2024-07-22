@@ -8,6 +8,7 @@ class SettingsView extends View {
             const btn = e.target.closest('.settings-close');
             if (!btn) return;
             this._parentEl.classList.add('hidden');
+            document.documentElement.classList.remove('hide-scrollbar');
             handler();
         }).bind(this))
     }

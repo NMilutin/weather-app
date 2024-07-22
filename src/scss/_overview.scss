@@ -12,8 +12,27 @@
     transform: rotateZ(360deg);
 }
 
+.btn-left {
+    width: 2em;
+
+    position: absolute;
+    top:50%;
+    left: 1em;
+    transform: translateY(-50%);
+}
+.btn-right {
+    width: 2em;
+
+    position: absolute;
+    top:50%;
+    right: 1em;
+    transform: translateY(-50%);
+}
 
 .overview {
+    * {
+    animation: overviewIntro 1s ease-in-out;
+    }
     color: colors.$text-light;
     text-shadow: colors.$text-shadow;
     font-size: 1.5em;
@@ -39,4 +58,13 @@
 .info-block {
     flex: 1;
     // max-width: calc(100%/3)
+}
+
+@keyframes overviewIntro {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100;
+    }
 }

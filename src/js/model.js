@@ -1,12 +1,14 @@
 import {getJSON} from './helpers.js';
 import {API_URL,CUR_WEATHER_ARGS,GEO_API_URL} from './config.js'
-export const state = {
-    current: {},
-    coords: {lat:0,lon:0},
-    places: [
-    ],
-    currentPlace: {}
+class State {
+    current = {};
+    places = [
+    ];
+    get activePlace() {
+        return this.places.find(place=>place.active);
+    }
 }
+export const state = new State();
 const weatherCodes = new Map([
     [0,{string:"Clear Sky",icon:{dayNight: true,icon:'clear'}}],
     [1,{string:"Mainly Clear",icon:{dayNight: true,icon:'clear'}}],
@@ -38,6 +40,9 @@ const weatherCodes = new Map([
 const generateCurrentForecast = function (data) {
     const weather = weatherCodes.get(data.current.weather_code);
     const object = {
+        place: state.activePlace.place,
+        index: state.places.indexOf(state.activePlace),
+        length: state.places.length,
         time: data.current.time,
         temperature: `${data.current.temperature_2m}${data.current_units.temperature_2m}`,
         realfeel: `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`,
@@ -51,7 +56,7 @@ const generateCurrentForecast = function (data) {
 
 export const getForecast = async function() {
     try {
-        const data = await getJSON(`${API_URL}?longitude=${state.currentPlace.lon}&latitude=${state.currentPlace.lat}&${CUR_WEATHER_ARGS}`);
+        const data = await getJSON(`${API_URL}?longitude=${state.activePlace.coords.lon}&latitude=${state.activePlace.coords.lat}&${CUR_WEATHER_ARGS}`);
         state.current = generateCurrentForecast(data);
     }
     catch(err) {
@@ -68,9 +73,36 @@ export const searchPlace = async function(place) {
     }
 }
 export const placeAdd = function(place,lat,lon) {
-    state.places.push({place,coords:{lat,lon},active:!state.places.length})
+    state.places.push({place,coords:{lat,lon}});
+    if (state.places.length===1) setActivePlace(0);
+    saveStorage();
 }
 
 export const placeDel = function(i) {
+    const wasActive = state.activePlace === state.places[i];
     state.places.splice(i,1);
+    if (wasActive) setActivePlace(0);
+    saveStorage();
+}
+
+export const setActivePlace = function(i) {
+    if (state.places.length === 0) {
+        saveStorage();
+        return;
+    }
+    state.places.forEach(place => {
+        place.active=false
+    });
+    state.places[i].active=true;
+    saveStorage()
+}
+
+const saveStorage = function () {
+    localStorage.setItem('places',JSON.stringify(state.places));
+}
+
+export const loadStorage = function () {
+    const places = JSON.parse(localStorage.getItem('places'));
+    if (places?.length === 0 || !Array.isArray(places)) return;
+    state.places = [...places];
 }

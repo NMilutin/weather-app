@@ -6,8 +6,12 @@ class OverviewView extends View{
     _errorMessage = 'There are no added places or there has been an error fetching weather data.'
     
     _generateMarkup() {
+        const hideLeft = this._data.index === 0
+        const hideRight = this._data.index === this._data.length - 1;
         return `
-            <img class="btn-reload" src="./src/img/svg/reload.svg"/>
+            <img class="btn-reload" src="${icons.reload}"/>
+            ${hideLeft?'':`<img class="btn btn-left" src="${icons.left}"/>`}
+            ${hideRight?'':`<img class="btn btn-right" src="${icons.right}"/>`}
             <div class="overview--location">           
                ${this._data.place}
            </div>
@@ -34,8 +38,16 @@ class OverviewView extends View{
             document.querySelector('.settings').classList.remove('hidden');
             document.documentElement.classList.add('hide-scrollbar');
             window.scrollTo({top:0, left:0,behavior: 'smooth'})
+            handler();
         });
-        handler();
+    }
+    addHandlerChangeActive(handler) {
+        this._parentEl.addEventListener('click',function(e) {
+            const btn = e.target.closest('.btn');
+            if (!btn) return;
+            if (btn.classList.contains('btn-left')) handler('l');
+            if (btn.classList.contains('btn-right')) handler('r');
+        })
     }
 }
 
