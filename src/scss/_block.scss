@@ -13,7 +13,7 @@
     }
     .block-cards {
         display: flex;
-        overflow-x: hidden;
+        overflow-x: auto;
         .card {
             text-align: center;
             max-width: 20%;
