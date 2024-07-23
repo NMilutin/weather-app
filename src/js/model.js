@@ -1,7 +1,8 @@
 import {getJSON} from './helpers.js';
-import {API_URL,CUR_WEATHER_ARGS,GEO_API_URL} from './config.js'
+import {API_URL,CUR_WEATHER_ARGS,GEO_API_URL,DAILY_WEATHER_ARGS,OTHER_ARGS} from './config.js'
 class State {
     current = {};
+    daily = {};
     places = [
     ];
     get activePlace() {
@@ -54,10 +55,44 @@ const generateCurrentForecast = function (data) {
     return object;
 }  
 
+const generateDailyForecast = function (data) {
+    const weather = data.daily.weather_code.map(code=>weatherCodes.get(code))
+    const arr = JSON.parse(JSON.stringify(new Array(data.daily.time.length).fill(new Object())));
+    arr.forEach((day,i)=>{
+        day.date = (()=>{
+            const time = new Date(data.daily.time[i]);
+            const today = new Date();
+            if (time.toDateString() === today.toDateString()) return 'Today';
+            if (today > time) return 'Yesterday';
+            if (time.getDate() === today.getDate()+1) return 'Tomorrow';
+            return `${time.getDate()}/${time.getMonth()+1}`
+        })();
+        day.weekday = new Date(data.daily.time[i]).getDay();
+        day.weather = weather[i].string;
+        day.temperatureMax = `${data.daily.temperature_2m_max[i]}${data.daily_units.temperature_2m_max}`;
+        day.temperatureMin = `${data.daily.temperature_2m_min[i]}${data.daily_units.temperature_2m_min}`;
+        day.uv = data.daily.uv_index_max[i];
+        day.sunrise = (() => {
+            const time = new Date(data.daily.sunrise[i]);
+            return `${time.getHours()}:${(time.getMinutes()+'').padStart(2,'0')}`
+        })();
+        day.sunset = (() => {
+            const time = new Date(data.daily.sunset[i]);
+            return `${time.getHours()}:${(time.getMinutes()+'').padStart(2,'0')}`
+        })();
+        day.precipitation = data.daily.precipitation_probability_max[i] +'%'; 
+        day.iconDay = `${weather[i].icon.dayNight?'day_':''}${weather[i].icon.icon}`,
+        day.iconNight = `${weather[i].icon.dayNight?'night_':''}${weather[i].icon.icon}`,
+        day.wind = {speed: `${data.daily.wind_speed_10m_max} ${data.daily_units.wind_speed_10m_max}`,direction: data.daily.wind_direction_10m_dominant}
+    })
+    return arr;
+}
+
 export const getForecast = async function() {
     try {
-        const data = await getJSON(`${API_URL}?longitude=${state.activePlace.coords.lon}&latitude=${state.activePlace.coords.lat}&${CUR_WEATHER_ARGS}`);
+        const data = await getJSON(`${API_URL}?longitude=${state.activePlace.coords.lon}&latitude=${state.activePlace.coords.lat}&${CUR_WEATHER_ARGS}&${DAILY_WEATHER_ARGS}&${OTHER_ARGS}`);
         state.current = generateCurrentForecast(data);
+        state.daily = generateDailyForecast(data)
     }
     catch(err) {
         throw err;

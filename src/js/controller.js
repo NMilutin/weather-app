@@ -1,15 +1,18 @@
 import * as model from './model.js'
 import overviewView from './views/overviewView.js'
+import dailyView from './views/dailyView.js';
 import placesView from './views/placesView.js';
 import settingsView from './views/settingsView.js';
 
-const controlOverview = async function(throwErr=true) {
+const controlForecast = async function(throwErr=true) {
     try {
         await model.getForecast();
         overviewView.render(model.state.current);
+        dailyView.render(model.state.daily);
     }
     catch(err) {
-        if (throwErr) overviewView.renderError();
+        // if (throwErr) overviewView.renderError();
+        console.log(err);
     }
 }
 
@@ -17,7 +20,7 @@ const controlOpenSettings = function() {
     placesView.render(model.state.places);
 }
 const controlCloseSettings = function() {
-    controlOverview(false);
+    controlForecast(false);
 }
 
 const controlPlaceAdd = async function(place) {
@@ -42,15 +45,15 @@ const controlPlaceDel = async function(i) {
 }
 const controlChangeActive = function(direction) {
     model.setActivePlace((model.state.places.indexOf(model.state.activePlace))+(direction==='l'?-1:direction==='r'?+1:0));
-    controlOverview();
+    controlForecast();
 }
 
 const renderStorageData = function() {
     model.loadStorage();
-    controlOverview(false);
+    controlForecast(false);
 }
 
-overviewView.addHandlerLoad(controlOverview);
+overviewView.addHandlerLoad(controlForecast);
 overviewView.addHandlerOpenSettings(controlOpenSettings);
 placesView.addHandlerPlaceAdd(controlPlaceAdd);
 placesView.addHandlerPlaceDel(controlPlaceDel);

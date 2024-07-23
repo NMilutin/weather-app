@@ -30,9 +30,6 @@
 }
 
 .overview {
-    * {
-    animation: overviewIntro 1s ease-in-out;
-    }
     color: colors.$text-light;
     text-shadow: colors.$text-shadow;
     font-size: 1.5em;
@@ -44,6 +41,9 @@
     flex-direction: column;
     align-items: center;
     gap: .5em;
+    * {
+    animation: overviewIntro 1s ease-in-out;
+    }
 }
 
 .overview--icon {
