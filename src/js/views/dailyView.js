@@ -7,7 +7,7 @@ class DailyView extends View {
         return this._data.map(day=>`
             <div class="card card-daily">
                 <div class="date--date">${day.date}</div>
-                <div class="date--day">Wed</div>
+                <div class="date--day">${day.weekday}</div>
                 <div class="card-daily--daytime">
                     <img class="icon" src="${icons[day.iconDay]}"/>
                     <div class="card-temp">${day.temperatureMax}</div>

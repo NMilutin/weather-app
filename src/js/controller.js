@@ -1,6 +1,7 @@
 import * as model from './model.js'
 import overviewView from './views/overviewView.js'
 import dailyView from './views/dailyView.js';
+import hourlyView from './views/hourlyView.js';
 import placesView from './views/placesView.js';
 import settingsView from './views/settingsView.js';
 
@@ -9,6 +10,7 @@ const controlForecast = async function(throwErr=true) {
         await model.getForecast();
         overviewView.render(model.state.current);
         dailyView.render(model.state.daily);
+        hourlyView.render(model.state.hourly);
     }
     catch(err) {
         // if (throwErr) overviewView.renderError();

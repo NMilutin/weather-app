@@ -1,8 +1,9 @@
 import {getJSON} from './helpers.js';
-import {API_URL,CUR_WEATHER_ARGS,GEO_API_URL,DAILY_WEATHER_ARGS,OTHER_ARGS} from './config.js'
-class State {
+import {API_URL,CUR_WEATHER_ARGS,GEO_API_URL,DAILY_WEATHER_ARGS,OTHER_ARGS,HOURLY_WEATHER_ARGS, AQI_API_URL} from './config.js'
+class State{
     current = {};
-    daily = {};
+    daily = [];
+    hourly = [];
     places = [
     ];
     get activePlace() {
@@ -38,6 +39,15 @@ const weatherCodes = new Map([
     [96,{string: 'Thunderstorm with Hail', icon:{dayNight: false, icon: 'thunder'}}],
     [99,{string: 'Thunderstorm with Heavy Hail', icon:{dayNight: false, icon: 'thunder'}}]
 ]);
+const weekdays = [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+]
 const generateCurrentForecast = function (data) {
     const weather = weatherCodes.get(data.current.weather_code);
     const object = {
@@ -47,6 +57,7 @@ const generateCurrentForecast = function (data) {
         time: data.current.time,
         temperature: `${data.current.temperature_2m}${data.current_units.temperature_2m}`,
         realfeel: `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`,
+        uv: data.hourly.uv_index[0],
         dayNight: data.current.is_day?'day_':'night_',
         weather: weather.string,
         icon: `${weather.icon.dayNight ? data.current.is_day?'day_':'night_' : ''}${weather.icon.icon}`,
@@ -67,7 +78,7 @@ const generateDailyForecast = function (data) {
             if (time.getDate() === today.getDate()+1) return 'Tomorrow';
             return `${time.getDate()}/${time.getMonth()+1}`
         })();
-        day.weekday = new Date(data.daily.time[i]).getDay();
+        day.weekday = weekdays[new Date(data.daily.time[i]).getDay()];
         day.weather = weather[i].string;
         day.temperatureMax = `${data.daily.temperature_2m_max[i]}${data.daily_units.temperature_2m_max}`;
         day.temperatureMin = `${data.daily.temperature_2m_min[i]}${data.daily_units.temperature_2m_min}`;
@@ -80,19 +91,49 @@ const generateDailyForecast = function (data) {
             const time = new Date(data.daily.sunset[i]);
             return `${time.getHours()}:${(time.getMinutes()+'').padStart(2,'0')}`
         })();
-        day.precipitation = data.daily.precipitation_probability_max[i] +'%'; 
-        day.iconDay = `${weather[i].icon.dayNight?'day_':''}${weather[i].icon.icon}`,
-        day.iconNight = `${weather[i].icon.dayNight?'night_':''}${weather[i].icon.icon}`,
-        day.wind = {speed: `${data.daily.wind_speed_10m_max} ${data.daily_units.wind_speed_10m_max}`,direction: data.daily.wind_direction_10m_dominant}
+        day.precipitationProbability = data.daily.precipitation_probability_max[i] +'%'; 
+        day.precipitation = data.daily.precipitation_sum[i] + 'mm';
+        day.iconDay = `${weather[i].icon.dayNight?'day_':''}${weather[i].icon.icon}`;
+        day.iconNight = `${weather[i].icon.dayNight?'night_':''}${weather[i].icon.icon}`;
+        day.wind = {speed: `${data.daily.wind_speed_10m_max[i]} ${data.daily_units.wind_speed_10m_max}`,direction: data.daily.wind_direction_10m_dominant[i]}
+    });
+    return arr;
+}
+const generateHourlyForecast = function (data) {
+    const weather = data.hourly.weather_code.map(code=>weatherCodes.get(code))
+    const arr = JSON.parse(JSON.stringify(new Array(data.hourly.time.length).fill(new Object())));
+    arr.forEach((hour,i)=>{
+        hour.isDay = data.hourly.is_day;
+        hour.date = (()=>{
+            const time = new Date(data.hourly.time[i]);
+            const today = new Date();
+            if (time.toDateString() === today.toDateString()) return 'Today';
+            if (today > time) return 'Yesterday';
+            if (time.getDate() === today.getDate()+1) return 'Tomorrow';
+            return `${time.getDate()}/${time.getMonth()+1}`
+        })();
+        hour.hour = `${new Date(data.hourly.time[i]).getHours()}:00`
+        hour.weather = weather[i].string;
+        hour.temperature = `${data.hourly.temperature_2m[i]}${data.hourly_units.temperature_2m}`;
+        hour.uv = data.hourly.uv_index[i];
+        hour.precipitationProbability = data.hourly.precipitation_probability[i] +'%'; 
+        hour.precipitation = data.hourly.precipitation[i] + 'mm';
+        hour.iconDay = `${weather[i].icon.dayNight?'day_':''}${weather[i].icon.icon}`;
+        hour.iconNight = `${weather[i].icon.dayNight?'night_':''}${weather[i].icon.icon}`;
+        hour.wind = {speed: `${data.hourly.wind_speed_10m[i]} ${data.hourly_units.wind_speed_10m}`,direction: data.hourly.wind_direction_10m[i]}
     })
     return arr;
 }
 
+
 export const getForecast = async function() {
     try {
-        const data = await getJSON(`${API_URL}?longitude=${state.activePlace.coords.lon}&latitude=${state.activePlace.coords.lat}&${CUR_WEATHER_ARGS}&${DAILY_WEATHER_ARGS}&${OTHER_ARGS}`);
+        const data = await getJSON(`${API_URL}?longitude=${state.activePlace.coords.lon}&latitude=${state.activePlace.coords.lat}&${CUR_WEATHER_ARGS}&${DAILY_WEATHER_ARGS}&${HOURLY_WEATHER_ARGS}&${OTHER_ARGS}`);
+        const aqi = await getJSON(`${AQI_API_URL}&longitude=${state.activePlace.coords.lon}&latitude=${state.activePlace.coords.lat}`)
+        console.log(aqi);
         state.current = generateCurrentForecast(data);
         state.daily = generateDailyForecast(data)
+        state.hourly = generateHourlyForecast(data);
     }
     catch(err) {
         throw err;

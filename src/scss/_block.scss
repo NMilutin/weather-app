@@ -15,7 +15,12 @@
         display: flex;
         overflow-x: auto;
         .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            width: fit-content;
+            height: 100%;
             max-width: 20%;
             min-width: 20%;
             @media screen and (max-width: 550px) {    
@@ -23,10 +28,16 @@
                 min-width: 25%;
                 font-size: .7em;
             }
+            .icon {
+                width: 100%;
+                padding: 20%;
+            }
         }
     }
     .block--daily {
-        @extend .block;
-        
+        @extend .block; 
     }
+    .block--hourly {
+        @extend .block
+    };
 }

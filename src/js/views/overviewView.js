@@ -23,7 +23,7 @@ class OverviewView extends View{
            <div class="overview--info">
                 <div class="info-block info--feel">Real Feel: ${this._data.realfeel}</div>
                 <div class="info-block info--wind">Wind: ${this._data.wind.speed} <div style="transform: rotateZ(${this._data.wind.direction+90}deg">➤</div></div>
-                <div class="info-block info--uv">UV Index: 7</div>
+                <div class="info-block info--uv">UV Index: ${this._data.uv}</div>
            </div>` 
     }
     addHandlerLoad(handler) {
