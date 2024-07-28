@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./src/scss/main.scss">
-    <script src="./src/js/controller.js" type="module"></script>
-    <title>Weather App</title>
-</head>
-<body>
-    <img class="settings-button" src="./src/img/svg/settings.svg"/>
-    <main>
-       <div class="overview">
-            <img class="btn-reload" src="./src/img/svg/reload.svg"/>
-            To get started, go to the settings and add a place :&rpar;
-            <!-- 
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./src/scss/main.scss" />
+        <script src="./src/js/controller.js" type="module"></script>
+        <title>Weather App</title>
+    </head>
+    <body>
+        <img class="settings-button" src="./src/img/svg/settings.svg" />
+        <main>
+            <div class="overview">
+                <img class="btn-reload" src="./src/img/svg/reload.svg" />
+                To get started, go to the settings and add a place :&rpar;
+                <!-- 
            <div class="overview--location">           
                Woochuck City
            </div>
@@ -27,65 +27,75 @@
                 <div class="info-block info--wind">5.6 m/s</div>
                 <div class="info-block info--uv">7</div>
            </div> -->
-       </div> 
-       <div class="block block--daily">
-           <div class="block-title">Daily Forecast</div> 
-           <div class="block-cards">
-                <div class="card card-daily">
-                    <div class="date--date">7/17</div>
-                    <div class="date--day">Wed</div>
-                    <div class="card-daily--daytime">
-                        <div class="icon"></div>
-                        <div class="card-temp">39</div>
+            </div>
+            <div class="block block--daily">
+                <div class="block-title">Daily Forecast</div>
+                <div class="block-cards">
+                    <div class="card card-daily">
+                        <div class="date--date">7/17</div>
+                        <div class="date--day">Wed</div>
+                        <div class="card-daily--daytime">
+                            <div class="icon"></div>
+                            <div class="card-temp">39</div>
+                        </div>
+                        <div class="card-daily--nighttime">
+                            <div class="icon"></div>
+                            <div class="card-temp">23</div>
+                        </div>
                     </div>
-                    <div class="card-daily--nighttime">
+                </div>
+            </div>
+            <div class="block block--hourly">
+                <div class="block-title">Hourly Forecast</div>
+                <div class="block-cards">
+                    <div class="card card-hourly">
+                        <div class="date--date">7/17</div>
+                        <div class="date--time">1 PM</div>
                         <div class="icon"></div>
-                        <div class="card-temp">23</div>
+                        <div class="card-temp">38</div>
                     </div>
                 </div>
-           </div>
-       </div>
-       <div class="block block--hourly">
-            <div class="block-title">Hourly Forecast</div>
-            <div class="block-cards">
-                <div class="card card-hourly">
-                    <div class="date--date">7/17</div>
-                    <div class="date--time">1 PM</div>
-                    <div class="icon"></div>
-                    <div class="card-temp">38</div>
+            </div>
+            <div class="block block--air">
+                <div class="block-title">Air Quality</div>
+                <div class="aqi-info">
+                    <div class="aqi-border">
+                        <div class="air-quality-index">40</div>
+                    </div>
+                    <div class="air-quality-details">
+                        <div class="pollutant">
+                            <div class="pollutant-name">PM2.5</div>
+                            <div class="pollutant-quantity">7ug/m3</div>
+                            <div class="pollutant-bar"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-       </div>
-       <div class="block block--air">
-            <div class="block-title">Air Quality</div>
-            <div class="air-quality-index">40</div>
-            <div class="air-quality-details">
-                <div class="pollutant">
-                    <div class="pollutant-name">PM2.5</div>
-                    <div class="pollutant-quantity">7ug/m3</div>
-                    <div class="pollutant-bar"></div>
+            <div class="block block--details">
+                <div class="block-title">Details</div>
+                <div class="details">
+                    <div class="detail">
+                        <div class="detail-icon"></div>
+                        <div class="detail-name">Dew Point</div>
+                        <div class="detail-value">11C</div>
+                    </div>
                 </div>
             </div>
-       </div>
-       <div class="block block--details">
-           <div class="block-title">Details</div>
-            <div class="details">
-                <div class="detail">
-                    <div class="detail-icon"></div>
-                    <div class="detail-name">Dew Point</div>
-                    <div class="detail-value">11C</div>
+        </main>
+        <div class="settings hidden">
+            <img class="settings-close" src="./src/img/svg/close.svg" />
+            <div class="settings-title">Weather App Settings</div>
+            <div class="settings-subtitle">Places</div>
+            <div class="settings-places">
+                <div class="add-place-container">
+                    <input
+                        id="place-add"
+                        alt="Place Name"
+                        autocomplete="off"
+                    /><img class="place-add" src="./src/img/svg/add.svg" />
                 </div>
+                <div class="places-list"></div>
             </div>
-       </div>
-    </main>
-    <div class="settings hidden">
-        <img class="settings-close" src="./src/img/svg/close.svg"/>
-        <div class="settings-title">Weather App Settings</div>
-        <div class="settings-subtitle">Places</div>
-        <div class="settings-places">
-            <div class="add-place-container"><input id="place-add" alt="Place Name" autocomplete="off"/><img class="place-add" src="./src/img/svg/add.svg"/></div>
-            <div class="places-list"></div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
