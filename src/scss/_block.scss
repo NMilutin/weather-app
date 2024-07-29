@@ -103,8 +103,13 @@
     }
 }
 .block--details {
-    .detail {
-        display: flex;
-        justify-content: space-between;
+    .details {
+        @media screen and (min-width: (700px)) {
+            padding: 0 25%;
+        }
+        .detail {
+            display: flex;
+            justify-content: space-between;
+        }
     }
 }
