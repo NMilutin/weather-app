@@ -105,6 +105,24 @@ const generateCurrentForecast = function (data, aqi) {
         temperature: `${data.current.temperature_2m}${data.current_units.temperature_2m}`,
         realfeel: `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`,
         uv: data.hourly.uv_index[0],
+        details: [
+            {
+                name: 'Cloud Cover',
+                val: `${data.current.cloud_cover}${data.current_units.cloud_cover}`,
+            },
+            {
+                name: 'Surface Pressure',
+                val: `${data.current.surface_pressure}${data.current_units.surface_pressure}`,
+            },
+            {
+                name: 'Dew Point',
+                val: `${data.minutely_15.dew_point_2m[0]}${data.minutely_15_units.dew_point_2m}`,
+            },
+            {
+                name: 'Visibility',
+                val: `${data.minutely_15.visibility[0]}${data.minutely_15_units.visibility}`,
+            },
+        ],
         dayNight: data.current.is_day ? 'day_' : 'night_',
         weather: weather.string,
         icon: `${
@@ -255,7 +273,7 @@ export const getForecast = async function () {
         const aqi = await getJSON(
             `${AQI_API_URL}&longitude=${state.activePlace.coords.lon}&latitude=${state.activePlace.coords.lat}`
         );
-        console.log(aqi);
+        console.log(data);
         state.current = generateCurrentForecast(data, aqi);
         state.daily = generateDailyForecast(data);
         state.hourly = generateHourlyForecast(data);

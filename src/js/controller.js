@@ -5,6 +5,7 @@ import hourlyView from './views/hourlyView.js';
 import aqiView from './views/aqiView.js';
 import placesView from './views/placesView.js';
 import settingsView from './views/settingsView.js';
+import detailsView from './views/detailsView.js';
 
 const controlForecast = async function (throwErr = true) {
     try {
@@ -13,9 +14,10 @@ const controlForecast = async function (throwErr = true) {
         dailyView.render(model.state.daily);
         hourlyView.render(model.state.hourly);
         aqiView.render(model.state.current.aqi);
+        detailsView.render(model.state.current.details);
     } catch (err) {
         // if (throwErr) overviewView.renderError();
-        console.log(err);
+        console.error(err);
     }
 };
 
