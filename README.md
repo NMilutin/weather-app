@@ -6,3 +6,4 @@ This web app is a personal project and uses [Open Meteo](https://open-meteo.com)
 
 -   Choosing place from a list instead of just adding the first result from the api.
 -   Better design.
+-   ...
