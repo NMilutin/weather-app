@@ -16,8 +16,8 @@ const controlForecast = async function (throwErr = true) {
         aqiView.render(model.state.current.aqi);
         detailsView.render(model.state.current.details);
     } catch (err) {
-        // if (throwErr) overviewView.renderError();
-        console.error(err);
+        if (throwErr) overviewView.renderError();
+        // console.error(err);
     }
 };
 
